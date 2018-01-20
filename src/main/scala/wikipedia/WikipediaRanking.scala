@@ -67,7 +67,7 @@ object WikipediaRanking {
    *   several seconds.
    */
   def rankLangsUsingIndex(index: RDD[(String, Iterable[WikipediaArticle])]): List[(String, Int)] = {
-    return index.map(i => (i._1,i._2.size)).collect().toList.sortBy(_._2).reverse
+    return index.mapValues(_.size).sortBy(-_._2).collect().toList
   }
 
   /* (3) Use `reduceByKey` so that the computation of the index and the ranking are combined.
