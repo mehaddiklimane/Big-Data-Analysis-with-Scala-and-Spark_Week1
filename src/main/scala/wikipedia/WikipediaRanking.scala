@@ -25,7 +25,7 @@ object WikipediaRanking {
   val sc: SparkContext = new SparkContext(conf)
   // Hint: use a combination of `sc.textFile`, `WikipediaData.filePath` and `WikipediaData.parse`
   val wikiRdd: RDD[WikipediaArticle] = sc.textFile(WikipediaData.filePath)
-                                          .map(line => WikipediaData.parse(line).persist()
+                                          .map(line => WikipediaData.parse(line)).persist()
 
 
   /** Returns the number of articles on which the language `lang` occurs.
