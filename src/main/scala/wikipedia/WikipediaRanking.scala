@@ -6,6 +6,7 @@ import org.apache.spark.SparkContext._
 
 import org.apache.spark.rdd.RDD
 
+
 case class WikipediaArticle(title: String, text: String) {
   /**
     * @return Whether the text of this article mentions `lang` or not
@@ -32,9 +33,7 @@ object WikipediaRanking {
    *  Hint2: consider using method `mentionsLanguage` on `WikipediaArticle`
    */
   def occurrencesOfLang(lang: String, rdd: RDD[WikipediaArticle]): Int = {
-    rdd.filter(f => f.mentionsLanguage(lang)).map(f => (lang,1)).aggregate(0)((k,v) => {
-      k + v._2
-    }, (u,x) => u+x)
+    return  rdd.filter(_.text.toLowerCase.split(" ").contains(lang.toLowerCase)).count().toInt
   }
 
   /* (1) Use `occurrencesOfLang` to compute the ranking of the languages
@@ -46,6 +45,7 @@ object WikipediaRanking {
    *   several seconds.
    */
   def rankLangs(langs: List[String], rdd: RDD[WikipediaArticle]): List[(String, Int)] = {
+    rdd.cache()
     return langs.map(lang => (lang,occurrencesOfLang(lang,rdd))).sortBy(_._2).reverse
   }
 
